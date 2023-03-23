@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LanguageFeatures.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LanguageFeatures.Controllers
 {
@@ -6,10 +7,15 @@ namespace LanguageFeatures.Controllers
     {
         public ViewResult Index()
         {
-            return View(new string[]
+            List<string> result = new();
+            foreach (var item in Product.GetProducts())
             {
-                "C#", "Language", "Features"
-            });
+                string name = item?.Name ?? "<No Name>";
+                decimal? price = item?.Price ?? 0;
+                string relatedName = item?.Related?.Name ?? "<None>";
+                result.Add(string.Format($"Название: {name}, цена: {price}, связанные: {relatedName}"));
+            }
+            return View(result);
         }
     }
 }
